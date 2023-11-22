@@ -11,7 +11,7 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
-# Create the Conatellation Derivative (Fullstack) Dapp on the Polygon zkEVM Testnet
+## Constellation Derivative (Fullstack) Dapp zkEVM Version
 - ***Features added to this version***
 - Added partial execution of an option by owner.
 - Added an oracle for the latest price into the contract for market options.
