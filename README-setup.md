@@ -1,4 +1,23 @@
-# Create a Fullstack Counter Dapp on the Polygon zkEVM Testnet
+# Create the Conatellation Derivative (Fullstack) Dapp on the Polygon zkEVM Testnet
+- ***Features added to this version***
+- Added partial execution of an option by owner.
+- Added an oracle for the latest price into the contract for market options.
+- Allow fraction of an option to be traded.
+- Considered and tested re-entrancy.
+- Allow ERC20 tokens as collateral instead of only Ether.
+- Add a pause/unpause ability for emergencies.
+- Allow bids/offers instead of direct fixed prices.
+- Add time buffers before expiry for executions.
+- Added a cancelOption function to allow owner to cancel before expiry.
+- Allow owner to withdraw collateral early if not executed.
+- Validate addresses intransferOption and addToMarket.
+- Separate collateral from premiums paid - have collateral returned in all cases.
+- Added error messages for require statements to make debugging easier.
+- Use SafeMath for subtraction as well to prevent underflows.
+- Allow array params like counterOffer and price to be variable length rather than fixed size.
+- Split Modifiers into reusable ones in a base contract.
+- Added Logging and events are good for transparency.
+- Added Mapping structures are efficient for storage.
 
 - Walk through the instructions in this README (main branch) to build a Counter dapp and deploy to the Polgon zkEVM testnet.
 - Check out the completed code branch here: https://github.com/oceans404/fullstack-zkevm/tree/complete
