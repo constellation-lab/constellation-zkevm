@@ -396,8 +396,8 @@ contract ConstellationDerivativeState is Ownable {
     //the balance of the offerer (lowestOfferer) is sufficient to cover the offer amount (lowestOffer). 
     //This is similar to the bidderBalance function used in the acceptBid function.
 
-    // Helper function to get offerer balance
     function offererBalance(uint256 id, address account) internal view returns (uint256) {
+        // Helper function to get offerer balance
         if (optionList[id].collateralToken == address(0)) {
             return account.balance;
         } else {
