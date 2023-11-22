@@ -15,36 +15,36 @@ npx hardhat node
 npx hardhat run scripts/deploy.js
 ```
 ## Constellation Derivative (Fullstack) Dapp zkEVM Version
-- ***Features added to this version***
-A. Add bidding and offering functionality:
+- **Features added to this version**
+- ***A. Add bidding and offering functionality:***
 -   Allow users to place bids and offers for options
 -   Maintain mapping of bids and offers by user
 -   Allow accepting best bid/offer to sell option
-B. Integrate with Chainlink oracle for real-time pricing:
+- ***B. Integrate with Chainlink oracle for real-time pricing:***
 -    Request latest price for a marketpair
 -    Fulfill latest price to use in executions
-C. Improve option lifecycle management:
+- ***C. Improve option lifecycle management:***
 -   Allow early withdrawal of collateral
 -   Enable extending expiration time
 -   Add pausing functionality
-D. Enhance access controls:
+- ***D. Enhance access controls:***
 -   Make critical functions onlyOwner
 -   Add an onlyCreator modifier
 -   Allow transferring creator role
-E. Add time buffers before expiry:
+- ***E. Add time buffers before expiry:***
 -   To prevent last minute sniping
 -   Configurable buffer duration
-F. Implement partial withdrawals:
+- ***F. Implement partial withdrawals:***
 -   Allow users to withdraw a % of their bid
-G. Analyze market activity:
+- ***G. Analyze market activity:***
 -   Add functions to analyze bids/offers
 -   Determine if market is active
-H. Emit more events for transparency:
+- ***H. Emit more events for transparency:***
 -   All state changes should emit events
-I. Additional test cases:
+- ***I. Additional test cases:***
 -   Focus on security and edge cases
 -   Use mocks for external dependencies
-J. Gas optimization:
+- ***J. Gas optimization:***
 -   Add modifiers to limit gas usage
 -   Use paginated returns for mappings
 
