@@ -1,10 +1,8 @@
 //This contract handles the key option operations for creation, transfer, bidding, offering, buying, selling 
 // SPDX-License-Identifier: MIT
 //pragma solidity ^0.8.9;
+//pragma solidity --no-strings;
 pragma solidity ^0.6.8;
-pragma solidity --no-strings;
-
-
 
 import "@openzeppelin/contracts-v0.7/access/Ownable.sol";
 import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
@@ -102,8 +100,6 @@ contract ConstellationDerivative is ConstellationDerivativeState{
 
         return id;
     }
-
-
 
     function transferOption(uint256 id, address to) external onlyOptionOwner(id) onlyValidTime(optionList[id].expires) onlyValidAddress(to) gasLimitNotExceeded {
         delete ownerList[msg.sender][id];
@@ -265,7 +261,6 @@ contract ConstellationDerivative is ConstellationDerivativeState{
     function buyOptionChainlink(uint256 id, uint256 units) external payable onlyValidAmount(msg.value) onlyValidTime(optionList[id].expires) gasLimitNotExceeded onlyIfNotExpired(id) onlyValidFraction(units, collateralList[id].units) {
         require(msg.value == latestPrice.mul(units).div(collateralList[id].units), "Price mismatch");
 
-
         uint256 totalPrice = 0;
 
         // Calculate the total price based on the option price and units
@@ -295,7 +290,6 @@ contract ConstellationDerivative is ConstellationDerivativeState{
 
         emit OptionBought(id, msg.sender, totalPrice);
     }
-
 
     function updatePrice(uint256 id) external onlyOptionOwner(id) {
         // Use Chainlink VRF to get the latest price
@@ -333,8 +327,6 @@ contract ConstellationDerivative is ConstellationDerivativeState{
         emit CollateralWithdrawn(id, msg.sender);
     }
 
-    
-
     function bid(uint256 id, uint256[] calldata offer) external payable onlyValidAddress(optionList[id].owner) onlyValidTime(optionList[id].expires) onlyIfNotExpired(id) onlyValidAmount(offer[0]) onlyIfNotStale(id) onlyValidCounterOffer(offer[1]) onlyValidFraction(offer[2], collateralList[id].units) gasLimitNotExceeded {
         require(optionList[id].status == OptionStatus.Created, "Option not in created state");
         require(bids[id][msg.sender] == 0, "You already have an active bid");
@@ -368,6 +360,7 @@ contract ConstellationDerivative is ConstellationDerivativeState{
         require(msg.sender != optionList[id].owner, "Owner cannot bid on their own option");
         bids[id][msg.sender] = amount;
     }
+
     function offerAmt(uint256 id, uint256 amount) external onlyOptionOwner(id) onlyValidAmount(amount) onlyValidTime(optionList[id].expires) onlyIfNotExpired(id) {
         require(msg.sender != optionList[id].owner, "Owner cannot offer on their own option");
         offers[id][msg.sender] = amount;
@@ -391,59 +384,56 @@ contract ConstellationDerivative is ConstellationDerivativeState{
         emit OfferPlaced(id, msg.sender, offerPrice);
     }
 
-    
-
     // ... (new bid function)
-function newBid(uint256 id, uint256[] calldata bidOffer, uint256[] calldata oracleData) external
-    onlyValidAddress(optionList[id].owner)
-    onlyValidTime(optionList[id].expires)
-    onlyIfNotExpired(id)
-    onlyValidAmount(bidOffer[0])
-    onlyIfNotStale(id)
-    onlyValidCounterOffer(bidOffer[1])
-    onlyValidFraction(bidOffer[2], collateralList[id].units)
-    gasLimitNotExceeded
-{
-    require(optionList[id].status == OptionStatus.Created, "Option not in created state");
+    function newBid(uint256 id, uint256[] calldata bidOffer, uint256[] calldata oracleData) external
+        onlyValidAddress(optionList[id].owner)
+        onlyValidTime(optionList[id].expires)
+        onlyIfNotExpired(id)
+        onlyValidAmount(bidOffer[0])
+        onlyIfNotStale(id)
+        onlyValidCounterOffer(bidOffer[1])
+        onlyValidFraction(bidOffer[2], collateralList[id].units)
+        gasLimitNotExceeded
+    {
+        require(optionList[id].status == OptionStatus.Created, "Option not in created state");
 
-    // Calculate total premium
-    uint256 totalPremium = bidOffer[0].add(bidOffer[1]);
+        // Calculate total premium
+        uint256 totalPremium = bidOffer[0].add(bidOffer[1]);
 
-    // Transfer collateral and premium to contract
-    _validateAndTransferBidCollateral( id, totalPremium, bidOffer[3]);
+        // Transfer collateral and premium to contract
+        _validateAndTransferBidCollateral( id, totalPremium, bidOffer[3]);
 
-    // Update bid data
-    _updateBidData(id, totalPremium);
+        // Update bid data
+        _updateBidData(id, totalPremium);
 
-    // Update market data
-    _updateMarketData(id, bidOffer);
+        // Update market data
+        _updateMarketData(id, bidOffer);
 
-    emit NewBid(id, msg.sender, bidOffer, oracleData);
-}
+        emit NewBid(id, msg.sender, bidOffer, oracleData);
+    }
 
-function _validateAndTransferBidCollateral(uint256 id, uint256 totalPremium, uint256 collateralAmount) internal {
-    // Input validation
-    require(totalPremium > 0, "Invalid bid premium: Bid premium must be greater than zero");
+    function _validateAndTransferBidCollateral(uint256 id, uint256 totalPremium, uint256 collateralAmount) internal {
+        // Input validation
+        require(totalPremium > 0, "Invalid bid premium: Bid premium must be greater than zero");
 
-    // Transfer collateral and approve
-    _transferBidCollateral(id, collateralAmount);
-}
+        // Transfer collateral and approve
+        _transferBidCollateral(id, collateralAmount);
+    }
 
-function _transferBidCollateral(uint256 id,uint256 collateralAmount) internal {
-    require(IERC20(optionList[id].collateralToken).transferFrom(msg.sender, address(this), collateralAmount), "Failed to transfer bid collateral");
-    require(IERC20(optionList[id].collateralToken).approve(address(this), collateralAmount), "Failed to approve bid collateral");
-}
+    function _transferBidCollateral(uint256 id,uint256 collateralAmount) internal {
+        require(IERC20(optionList[id].collateralToken).transferFrom(msg.sender, address(this), collateralAmount), "Failed to transfer bid collateral");
+        require(IERC20(optionList[id].collateralToken).approve(address(this), collateralAmount), "Failed to approve bid collateral");
+    }
 
-function _updateBidData(uint256 id, uint256 totalPremium) internal {
-    // Update bid data logic
-    bids[id][msg.sender] = totalPremium;
-}
+    function _updateBidData(uint256 id, uint256 totalPremium) internal {
+        // Update bid data logic
+        bids[id][msg.sender] = totalPremium;
+    }
 
-function _updateMarketData(uint256 id, uint256[] memory bidOffer) internal {
-    // Update market data logic
-    marketList[id].counterOffer = bidOffer;
-}
-
+    function _updateMarketData(uint256 id, uint256[] memory bidOffer) internal {
+        // Update market data logic
+        marketList[id].counterOffer = bidOffer;
+    }
 
     // ... (new resetBids function)
     function newResetBids(uint256 id) external onlyOptionOwner(id) onlyIfNotExpired(id) {
