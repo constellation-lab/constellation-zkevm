@@ -1,11 +1,14 @@
-# Sample Hardhat Project
+# Constellation - zkEVM
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This project demonstrates a basic Hardhat use case. It also has the zkEVM version of Constellation Derivative. It also comes with a sample contract, a test for that contract, and a script that deploys that contract.
 
 Try running some of the following tasks:
 
 ```shell
 npx hardhat help
+npx hardhat compile --force
+npx hardhat run scripts/deploy.js
+
 npx hardhat test
 REPORT_GAS=true npx hardhat test
 npx hardhat node
