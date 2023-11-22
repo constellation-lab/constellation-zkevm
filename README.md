@@ -1,6 +1,6 @@
 # Constellation - zkEVM
 
-This project demonstrates a basic Hardhat use case. It also has the zkEVM version of Constellation Derivative. It also comes with a sample contract, a test for that contract, and a script that deploys that contract.
+This project demonstrates a Hardhat use case for zero knowledge proofs EVM Constellation Derivative Contract. It also comes with a sample contract, a test for that contract, and a script that deploys that contract.
 
 Try running some of the following tasks:
 
@@ -16,6 +16,39 @@ npx hardhat run scripts/deploy.js
 ```
 ## Constellation Derivative (Fullstack) Dapp zkEVM Version
 - ***Features added to this version***
+A. Add bidding and offering functionality:
+-   Allow users to place bids and offers for options
+-   Maintain mapping of bids and offers by user
+-   Allow accepting best bid/offer to sell option
+B. Integrate with Chainlink oracle for real-time pricing:
+-    Request latest price for a marketpair
+-    Fulfill latest price to use in executions
+C. Improve option lifecycle management:
+-   Allow early withdrawal of collateral
+-   Enable extending expiration time
+-   Add pausing functionality
+D. Enhance access controls:
+-   Make critical functions onlyOwner
+-   Add an onlyCreator modifier
+-   Allow transferring creator role
+E. Add time buffers before expiry:
+-   To prevent last minute sniping
+-   Configurable buffer duration
+F. Implement partial withdrawals:
+-   Allow users to withdraw a % of their bid
+G. Analyze market activity:
+-   Add functions to analyze bids/offers
+-   Determine if market is active
+H. Emit more events for transparency:
+-   All state changes should emit events
+I. Additional test cases:
+-   Focus on security and edge cases
+-   Use mocks for external dependencies
+J. Gas optimization:
+-   Add modifiers to limit gas usage
+-   Use paginated returns for mappings
+
+***Features Tracking Information:***
 - Added partial execution of an option by owner.
 - Added an oracle for the latest price into the contract for market options.
 - Allow fraction of an option to be traded.
