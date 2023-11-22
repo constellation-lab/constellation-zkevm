@@ -140,7 +140,6 @@ contract ConstellationDerivativeState is Ownable {
     event PartialBidWithdrawn(uint256 id, address indexed withdrawer, uint256 partialAmount);
     event OptionExecuted(bytes32 indexed requestId, uint256 randomNumber);
 
-
     modifier onlyCreator() {
         require(msg.sender == config.creator, "Unauthorized: Only creator can call this function");
         _;
@@ -232,12 +231,11 @@ contract ConstellationDerivativeState is Ownable {
         _;
     }
 
-
     function instantiate() external onlyCreator() {
         // Initialization logic
     }
 
-     receive() external payable {
+    receive() external payable {
         // Handle incoming Ether
         // You can implement logic here to handle the incoming Ether.
         // For example, you may want to log the sender and the amount received.
@@ -273,7 +271,7 @@ contract ConstellationDerivativeState is Ownable {
         emit FunctionWithOnlyOwnerCalled(msg.sender);
     }
 
-        // Helper function with event emission
+    // Helper function with event emission
     function functionWithEvent(uint256 optionId) external {
         // Add your specific logic here
         // For example, emit an event indicating the function was called
@@ -349,7 +347,6 @@ contract ConstellationDerivativeState is Ownable {
         // Additional implementation details if needed
     }
 
-
     function checkOnlyIfNotStale(uint256 id) external view {
         require(block.timestamp < optionList[id].expires, "Stale bid/offer");
         // Additional logic if needed for the existing onlyIfNotStale implementation
@@ -369,7 +366,7 @@ contract ConstellationDerivativeState is Ownable {
                 totalBids++;
             }
         }
-
+        
         return totalBids;
     }
 
@@ -386,7 +383,7 @@ contract ConstellationDerivativeState is Ownable {
         return totalOffers;
     }
 
-        // Getter functions for ConfigResponse fields
+    // Getter functions for ConfigResponse fields
     function getCreator() external view returns (address) {
         return config.creator;
     }
@@ -395,8 +392,11 @@ contract ConstellationDerivativeState is Ownable {
         return config.totalOptionsNum;
     }
 
-        // Helper function to get offerer balance
-    
+    //In this modified acceptOffer function, the offererBalance function is used to check whether 
+    //the balance of the offerer (lowestOfferer) is sufficient to cover the offer amount (lowestOffer). 
+    //This is similar to the bidderBalance function used in the acceptBid function.
+
+    // Helper function to get offerer balance
     function offererBalance(uint256 id, address account) internal view returns (uint256) {
         if (optionList[id].collateralToken == address(0)) {
             return account.balance;
@@ -405,7 +405,7 @@ contract ConstellationDerivativeState is Ownable {
         }
     }
 
-        // Helper function to get bidder balance
+    // Helper function to get bidder balance
     function bidderBalance(uint256 id, address account) internal view returns (uint256) {
         if (optionList[id].collateralToken == address(0)) {
             return account.balance;
@@ -414,7 +414,7 @@ contract ConstellationDerivativeState is Ownable {
         }
     }
 
-        function analyzeActivity(uint256 id) external onlyIfNotExpired(id) {
+    function analyzeActivity(uint256 id) external onlyIfNotExpired(id) {
         
          // Implement the logic for the new analyzeActivity function
         // This function may involve analyzing bids, offers, or other relevant activities and emitting relevant events
@@ -439,7 +439,7 @@ contract ConstellationDerivativeState is Ownable {
         minBidAmount = _minBidAmount;
     }
 
-        // Helper function to get the highest bid amount
+    // Helper function to get the highest bid amount
     function getHighestBid(uint256 id) internal view returns (uint256) {
         uint256 highestBid = 0;
 
@@ -470,15 +470,13 @@ contract ConstellationDerivativeState is Ownable {
         return lowestOffer;
     }
 
-        function setTimeBuffer(uint256 id, uint256 buffer) external onlyOptionOwner(id) onlyValidTime(optionList[id].expires) {
-        
+    function setTimeBuffer(uint256 id, uint256 buffer) external onlyOptionOwner(id) onlyValidTime(optionList[id].expires) {    
         
         // Set a time buffer before expiry for executions
         optionList[id].expires = optionList[id].expires.add(buffer);
 
         emit TimeBufferSet(id, buffer);
     }
-
 
     function resetBids(uint256 id) external onlyOptionOwner(id) onlyIfNotExpired(id)  {
          
@@ -576,9 +574,5 @@ contract ConstellationDerivativeState is Ownable {
 
         emit OfferResetFeeSet(id, fee);
     }
-
-    /*In this modified acceptOffer function, the offererBalance function is used to check whether 
-    the balance of the offerer (lowestOfferer) is sufficient to cover the offer amount (lowestOffer). 
-    This is similar to the bidderBalance function used in the acceptBid function.*/
 
 }
