@@ -245,18 +245,32 @@
     core.incrementUserBidCount(msg.sender);
 
     // Update market data
-    ConstellationCore.Data memory marketData = core.getMarketList(id);
+   /* ConstellationCore.Data memory marketData = core.getMarketList(id);
     marketData.counterOffer = offer;
    
 
     // Update priceToBidder mapping
     //address previousBidder = core.getPriceToBidder(id, offer[3]);
 
-    core.getPriceToBidder(id, offer[3]);
+    core.getPriceToBidder(id, offer[3]);*/
+
+        // Update market data
+    _updateMarketData(id, offer);
 
     emit Constants.BidPlaced(id, msg.sender, offer);
 }
 
+function _updateMarketData(uint256 id, uint256[] memory offer) internal {
+    // Update market data
+    ConstellationCore.Data memory marketData = core.getMarketList(id);
+    marketData.counterOffer = offer;
+
+    // Update priceToBidder mapping
+    // address previousBidder = core.getPriceToBidder(id, offer[3]);
+    core.getPriceToBidder(id, offer[3]);
+
+    emit Constants.BidPlaced(id, msg.sender, offer);
+}
 
 function simpleBid(uint256 id, uint256 amount) external payable onlyValidAmount(amount) onlyValidTime(core.getOption(id).expires) onlyIfNotExpired(id) {
     require(msg.sender != core.getOption(id).owner, "Owner cannot bid on their own option");
@@ -565,7 +579,7 @@ function extendBidDuration(uint256 id, uint256 additionalDuration) external only
 function extendOfferDuration(uint256 id, uint256 additionalDuration) external onlyOptionOwner(id) onlyIfNotExpired(id) {
     require(additionalDuration > 0, "Additional duration must be greater than zero");
 
-    // Use SafeMath to prevent overflow
+    // Use SafeMath     to prevent overflow
     uint256 newExpiration = core.getOption(id).expires.add(additionalDuration);
     require(newExpiration > core.getOption(id).expires, "Overflow in expiration calculation");
 
