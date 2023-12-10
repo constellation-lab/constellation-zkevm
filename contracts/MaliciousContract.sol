@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.8;
 
-import "./ConstellationDerivative.sol";
+import "./ConstellationCore.sol";
 
 contract MaliciousContract {
-    ConstellationDerivative public target;
+    ConstellationCore public target;
     mapping(address => uint256) public balances;
 
-    constructor(ConstellationDerivative _target) public {
+    constructor(ConstellationCore _target) public {
         target = _target;
     }
 
