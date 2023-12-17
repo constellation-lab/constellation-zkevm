@@ -1,10 +1,17 @@
     // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.8;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
+/*import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-v0.7/math/SafeMath.sol";
-import "@openzeppelin/contracts-v0.7/access/Ownable.sol";
+
 import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
+
+//import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";*/
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./ChainlinkMock.sol";
 import "./Constants.sol";
@@ -16,18 +23,28 @@ interface ChainlinkVRF {
 }
 
 pragma experimental ABIEncoderV2;
-contract ConstellationCore is Ownable {
+contract ConstellationCore {
+//contract ConstellationCore is Initializable, OwnableUpgradeable {
     using SafeMath for uint256;
     using Constants for *;
     //using Constants for address;
 
     // ConstellationCore
+    
+    //function initialize() public initializer {
+        // Initialize contract state variables and perform any necessary setup
+        // This function will be called only once during the contract deployment
+        //OwnableUpgradeable.__Ownable_init();
+        // Additional initialization code if needed
+    //}
+
+
 
     ConfigResponse public config;
     //mapping(uint256 => Data) public options;
      // Mapping to store option data by ID
     mapping(uint256 => Data) public optionList;
-
+    
     // Struct to store option data
     struct Data {
         address creator;
@@ -125,7 +142,7 @@ contract ConstellationCore is Ownable {
     uint256 public offerResetFee;
     uint256 public latestPrice;
     address public chainlinkOracle;
-    uint256 public gasLimit = 200000;
+    uint256 public gasLimit;
     bool public paused;
 
      ChainlinkMock public chainlinkMock;
@@ -696,7 +713,7 @@ contract ConstellationCore is Ownable {
         }
 
     // Function to update the creator address, restricted to the current creator
-        function setOwner(address _newOwner) external onlyOwner() {
+        function setOwner(address _newOwner) external /*onlyOwner() */{
             require(_newOwner != address(0), "Invalid owner address");
             data.owner = _newOwner;
         }

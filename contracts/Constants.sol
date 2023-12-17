@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.8;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-v0.7/math/SafeMath.sol";
-import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
+/*import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
+import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";*/
+
+import "@openzeppelin/contracts/utils/math/Math.sol";
 import "./ChainlinkMock.sol";
 import "./ConstellationCore.sol";
 
 library Constants {
-    using SafeMath for uint256;
+    using Math for uint256;
 
     // Enum to represent option status
     enum OptionStatus {

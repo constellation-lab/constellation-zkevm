@@ -1,11 +1,12 @@
  //Contains the globally accessed state that is needed across different contract 
 // SPDX-License-Identifier: MIT
 //pragma solidity ^0.8.9;
-pragma solidity ^0.6.8;
+pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-v0.7/math/SafeMath.sol";
-import "@openzeppelin/contracts-v0.7/access/Ownable.sol";
+/*import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts-v0.7/access/Ownable.sol";*/
+
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 import "./ChainlinkMock.sol";
 import "./ConstellationCore.sol"; // Import the core contract interface
@@ -24,7 +25,7 @@ contract ConstellationAdmin is Ownable {
 
     IConstellationCore public core; // Reference to ConstellationCore
 
-    constructor(address coreAddress) public {
+    constructor(address coreAddress)  {
         core = IConstellationCore(coreAddress);
     }
 

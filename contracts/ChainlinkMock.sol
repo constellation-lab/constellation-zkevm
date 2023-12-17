@@ -1,9 +1,9 @@
 // ChainlinkMock.sol
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.6.8;
+pragma solidity ^0.8.0;
 
-import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
+import "@chainlink/contracts/src/v0.8/VRFConsumerBase.sol";
 
 contract ChainlinkMock is VRFConsumerBase {
     bytes32 internal keyHash;
@@ -19,7 +19,7 @@ contract ChainlinkMock is VRFConsumerBase {
     event RandomNumberFulfilled(bytes32 indexed requestId, uint256 randomness);
 
     constructor(address _vrfCoordinator, bytes32 _keyHash, uint256 _fee, address _link)
-        VRFConsumerBase(_vrfCoordinator, _link) public
+        VRFConsumerBase(_vrfCoordinator, _link)
     {
         keyHash = _keyHash;
         fee = _fee;

@@ -1,11 +1,12 @@
 require("dotenv").config();
 require("@nomicfoundation/hardhat-toolbox");
+require('@openzeppelin/hardhat-upgrades');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   //solidity: "0.8.9",
   solidity: {
-    version: "0.6.8",
+    version: "0.8.7",
     settings: {
       optimizer: {
         enabled: true,
@@ -13,6 +14,10 @@ module.exports = {
       },
     },
   },
+  
+  plugins: [
+    "truffle-plugin-verify" 
+  ],
   
   paths: {
     artifacts: "./src",

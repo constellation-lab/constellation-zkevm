@@ -1,8 +1,11 @@
-const { ethers } = require("hardhat");
+const { ethers, upgrades } = require("hardhat");
 
 async function main() {
   const ConstellationCoreContractFactory = await ethers.getContractFactory("ConstellationCore");
   const ConstellationMarketContractFactory = await ethers.getContractFactory("ConstellationMarket");
+
+  await upgrades.deployProxy(ConstellationCoreContractFactory);
+  await upgrades.deployProxy(ConstellationMarketContractFactory);
 
   // Specify your private key
   const privateKey = "e2dbf702083acc7c12e944de0654e8b5e092c77bfa8e04324d31cf3f835efa5b";
@@ -16,6 +19,7 @@ async function main() {
     signer
   );
 
+  //await plugin.splitMerge(factory); 
   const coreDeploymentTx = await factory.deploy();
   console.log("ConstellationCore contract deployed:", coreDeploymentTx.address);
 
@@ -27,6 +31,7 @@ async function main() {
     signer
   );
 
+  //await plugin.splitMerge(marketFactory); 
   const marketDeploymentTx = await marketFactory.deploy(coreDeploymentTx.address); // Pass the address of ConstellationCore to ConstellationMarket constructor
   console.log("ConstellationMarket contract deployed:", marketDeploymentTx.address);
 

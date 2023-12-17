@@ -2,12 +2,14 @@
     // SPDX-License-Identifier: MIT
     //pragma solidity ^0.8.9;
     //pragma solidity --no-strings;
-    pragma solidity ^0.6.8;
+    pragma solidity ^0.8.0;
 
-    import "@openzeppelin/contracts-v0.7/access/Ownable.sol";
+    /*
     import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
-    import "@openzeppelin/contracts-v0.7/math/SafeMath.sol";
-    import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
+    import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";*/
+
+    import "@openzeppelin/contracts/access/Ownable.sol";
+    import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
     import "./ConstellationCore.sol";
     import "./ChainlinkMock.sol";
@@ -129,7 +131,7 @@
 
         IConstellationCore public core; // Interface to interact with ConstellationCore
 
-        constructor(address coreAddress) public {
+        constructor(address coreAddress)  {
             core = IConstellationCore(coreAddress);
         }
         
@@ -210,14 +212,14 @@
             }
 
 
- function bid(uint256 id, uint256[] calldata offer) external payable
+ function bid(uint256 id, uint256[] calldata nowBid) external payable
         onlyValidAddress(core.getOption(id).owner)
         onlyValidTime(core.getExpiry(id))
         onlyIfNotExpired(id)
-        onlyValidAmount(offer[0])
+        onlyValidAmount(nowBid[0])
         onlyIfNotStale(id)
-        onlyValidCounterOffer(offer[1])
-        onlyValidFraction(offer[2], core.getOption(id).units)
+        onlyValidCounterOffer(nowBid[1])
+        onlyValidFraction(nowBid[2], core.getOption(id).units)
         gasLimitNotExceeded
     {
     require(core.getOption(id).status == Constants.OptionStatus.Created, "Option not in created state");
@@ -226,7 +228,7 @@
 
     uint256 maxBidCount = core.getMaxBidCount();
     // Calculate total premium
-    uint256 totalPremium = offer[0].add(offer[1]);
+    uint256 totalPremium = nowBid[0].add(nowBid[1]);
 
     // Check that bid + premium <= collateralLimit
     require(totalPremium <= core.getCollateralLimit(id), "Bid + premium exceeds collateral limit");
@@ -255,21 +257,21 @@
     core.getPriceToBidder(id, offer[3]);*/
 
         // Update market data
-    _updateMarketData(id, offer);
+    _updateMarketData(id, nowBid);
 
-    emit Constants.BidPlaced(id, msg.sender, offer);
+    emit Constants.BidPlaced(id, msg.sender, nowBid);
 }
 
-function _updateMarketData(uint256 id, uint256[] memory offer) internal {
+function _updateMarketData(uint256 id, uint256[] memory placeBid) internal {
     // Update market data
     ConstellationCore.Data memory marketData = core.getMarketList(id);
-    marketData.counterOffer = offer;
+    marketData.counterOffer = placeBid;
 
     // Update priceToBidder mapping
     // address previousBidder = core.getPriceToBidder(id, offer[3]);
-    core.getPriceToBidder(id, offer[3]);
+    core.getPriceToBidder(id, placeBid[3]);
 
-    emit Constants.BidPlaced(id, msg.sender, offer);
+    emit Constants.BidPlaced(id, msg.sender, placeBid);
 }
 
 function simpleBid(uint256 id, uint256 amount) external payable onlyValidAmount(amount) onlyValidTime(core.getOption(id).expires) onlyIfNotExpired(id) {

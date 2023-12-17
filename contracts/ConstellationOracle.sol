@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.6.8;
+pragma solidity ^0.8.0;
 
 import "./ConstellationCore.sol"; // Import the core contract interface
-import "@openzeppelin/contracts-v0.7/access/Ownable.sol";
+/*import "@openzeppelin/contracts-v0.7/access/Ownable.sol";
 import "@openzeppelin/contracts-v0.7/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-v0.7/math/SafeMath.sol";
-import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";
+import "@chainlink/contracts/src/v0.6/VRFConsumerBase.sol";*/
+
+import "@openzeppelin/contracts/utils/math/Math.sol";
 
 contract ConstellationOracle is Ownable, VRFConsumerBase {
-    using SafeMath for uint256;
+    using Math for uint256;
 
     uint256 public latestPrice;
     address public chainlinkOracle;
@@ -20,7 +21,7 @@ contract ConstellationOracle is Ownable, VRFConsumerBase {
 
     constructor(address coreAddress, address linkToken, address vrfCoordinator, bytes32 _keyHash, uint256 _fee)
         VRFConsumerBase(vrfCoordinator, linkToken)
-        public
+        
     {
         //core = ConstellationCore(coreAddress);
         core = ConstellationCore(payable(coreAddress));
